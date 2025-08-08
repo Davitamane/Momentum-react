@@ -1,7 +1,7 @@
-import TaskImportance from "./TaskImportance";
 import { FaRegCommentAlt } from "react-icons/fa";
-import TaskType from "./TaskType";
 import image from "../../assets/test.jpeg";
+import TaskType from "../../ui/TaskType";
+import TaskImportance from "../../ui/TaskImportance";
 
 function Task() {
   return (

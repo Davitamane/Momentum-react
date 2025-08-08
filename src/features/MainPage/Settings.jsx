@@ -13,7 +13,7 @@ function Settings() {
         <MdKeyboardArrowDown className="size-7" />
       </SettingsButton>
       <SettingsButton>
-        <p className="text-lg">პრიორიტეტი</p>
+        <p className="text-lg">თანამშრომელი</p>
         <MdKeyboardArrowDown className="size-7" />
       </SettingsButton>
     </div>

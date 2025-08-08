@@ -1,9 +1,9 @@
-import js from "@eslint/js";
 import globals from "globals";
 import reactRecommended from "eslint-plugin-react/configs/recommended.js";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import importPlugin from "eslint-plugin-import";
+import react from "eslint-plugin-react";
 
 export default [
   {
@@ -13,6 +13,7 @@ export default [
     files: ["**/*.{js,jsx}"],
     ...reactRecommended,
     plugins: {
+      react,
       "react-hooks": reactHooks,
       "react-refresh": reactRefresh,
       import: importPlugin,
@@ -41,6 +42,11 @@ export default [
     settings: {
       react: {
         version: "detect",
+      },
+      "import/resolver": {
+        node: {
+          extensions: [".js", ".jsx", ".ts", ".tsx"],
+        },
       },
     },
   },

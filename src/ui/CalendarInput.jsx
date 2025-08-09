@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import { FiCalendar } from "react-icons/fi";
 import "react-datepicker/dist/react-datepicker.css";
@@ -9,14 +9,13 @@ export default function CalendarInput() {
 
   tomorrow.setDate(tomorrow.getDate() + 1);
 
-
   const [selectedDate, setSelectedDate] = useState(tomorrow);
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div
       onClick={() => setIsOpen(true)}
-      className="flex items-center border border-gray-300 rounded-md px-3 py-2 w-56 bg-white cursor-pointer"
+      className="flex items-center border border-gray-300 rounded-md px-3 py-2 w-1/2 bg-white cursor-pointer"
     >
       <FiCalendar className="text-gray-500 mr-2" size={20} />
       <DatePicker

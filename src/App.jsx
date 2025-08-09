@@ -3,6 +3,7 @@ import MainPage from "./pages/MainPage";
 import TaskDetails from "./pages/TaskDetails";
 import TaskCreation from "./pages/TaskCreation";
 import AppLayout from "./ui/AppLayout";
+import MainPageProvider from "./context/MainPageContext";
 
 function App() {
   return (
@@ -10,7 +11,14 @@ function App() {
       <Routes>
         <Route element={<AppLayout />}>
           <Route index element={<Navigate replace to="mainPage" />} />
-          <Route path="mainPage" element={<MainPage />} />
+          <Route
+            path="mainPage"
+            element={
+              <MainPageProvider>
+                <MainPage />
+              </MainPageProvider>
+            }
+          />
           <Route path="details" element={<TaskDetails />} />
           <Route path="create" element={<TaskCreation />} />
         </Route>

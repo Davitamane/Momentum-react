@@ -18,7 +18,7 @@ function TaskCreation() {
             </p>
             <input
               type="text"
-              className="w-full text-sm bg-white border border-outline rounded-md resize-none focus:outline-none focus:border-2 p-2.5"
+              className="w-full text-sm focus:border-2 bg-white border border-gray-300 rounded-md resize-none focus:outline-none focus:border-2flex justify-between items-center px-4 py-3"
             />
             <Validation />
           </div>
@@ -27,24 +27,23 @@ function TaskCreation() {
             <p>
               დეპარტამენტი<span>*</span>
             </p>
-              <Dropdown />
+            <Dropdown />
           </div>
 
           <div>
             <p>სათაური</p>
             <textarea
               name="comment"
-              className="w-full h-32 text-sm bg-white border border-outline rounded-md resize-none focus:outline-none focus:border-2 p-4"
+              className="w-full h-32 text-sm bg-white border border-gray-300 rounded-md resize-none focus:outline-none focus:border-2 p-4"
             ></textarea>
             <Validation />
           </div>
 
           <div className="w-full">
             <p>
-              პასუხისმგებელი თანამშრომელი(აქ მოდალის გაღების ღილაკი უნდა
-              ჩავამატო)<span>*</span>
+              პასუხისმგებელი თანამშრომელი<span>*</span>
             </p>
-              <Dropdown />
+            <Dropdown />
           </div>
 
           <div className="flex justify-between gap-8">
@@ -58,15 +57,20 @@ function TaskCreation() {
               <p>
                 სტატუსი<span>*</span>
               </p>
-                <Dropdown />
+              <Dropdown />
             </div>
           </div>
-          <div>
+          <div className="w-full">
+            <p>
+              სტატუსი<span>*</span>
+            </p>
             <CalendarInput />
           </div>
         </div>
 
-        <Button>დავალების შექმნა</Button>
+        <div className="w-full flex justify-end mt-16">
+          <Button>დავალების შექმნა</Button>
+        </div>
       </div>
     </>
   );

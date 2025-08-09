@@ -5,6 +5,8 @@ import { PiClock } from "react-icons/pi";
 import { GoPerson } from "react-icons/go";
 import { IoCalendarClearOutline } from "react-icons/io5";
 import Dropdown from "../features/TaskDetails/Dropdown";
+import image from "../assets/test.jpeg";
+import CommentContainer from "../features/TaskDetails/CommentContainer";
 
 function TaskDetails() {
   return (
@@ -17,7 +19,7 @@ function TaskDetails() {
             <TaskImportance type="big" children="დაბალი" />
             <TaskType type="big" children="დიზაინი" />
           </div>
-          <h1 className="pt-1.5 pb-4.5 font-bold text-2xl">
+          <h1 className="pt-2.5 pb-4.5 font-bold text-2xl">
             Redberry-ს საიტის ლენდინგის დიზაინი
           </h1>
           <p className="text-sm">
@@ -42,18 +44,24 @@ function TaskDetails() {
               <GoPerson className="w-7 h-7" />
               <p>თანამშრომელი</p>
             </TaskDetailsStatuses>
-            <div>ოთხი</div>
+            <div className="inline-flex gap-2 items-center">
+              <img src={image} alt="test" className="w-8 h-8 rounded-full" />
+              <div className="flex flex-col">
+                <p className="text-xs text-gray-500">დიზაინის დეპარტამენტი</p>
+                <h3>ელარია ბაგრატიონი</h3>
+              </div>
+            </div>
             <TaskDetailsStatuses>
               <IoCalendarClearOutline className="w-7 h-7" />
               <p>დავალების ვადა</p>
             </TaskDetailsStatuses>
-            <div>ექვსი</div>
+            <div className="flex items-center">ორშ - 02/2/2025</div>
           </div>
         </div>
       </div>
 
       {/* Container 2 */}
-      <div className="w-1/2">second part</div>
+      <CommentContainer />
     </div>
   );
 }

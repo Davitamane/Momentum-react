@@ -6,12 +6,13 @@
   --color-orange: #fb5607;
   --color-pink: #ff006e;
   --color-blue: #3a86ff;
+  --color-background: #F8F3FE;
+  --color-outline: #DDD2FF
 }
 
 body {
   font-family: "Firago", sans-serif;
   margin: 2rem 5rem 4rem 5rem;
-
 }
 
 button {

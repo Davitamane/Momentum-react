@@ -2,9 +2,10 @@ import { useState, useRef, useEffect } from "react";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 
 const options = [
-  { label: "დაბალი", color: "text-green-600" },
-  { label: "საშუალო", color: "text-yellow-500" },
-  { label: "მაღალი", color: "text-red-500" },
+  { label: "დასაწყები" },
+  { label: "პროგრესში" },
+  { label: "მზად ტესტირებისთვის" },
+  { label: "დასრულებული" },
 ];
 
 function Dropdown() {
@@ -20,7 +21,7 @@ function Dropdown() {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      console.log(event.target);
+      // console.log(event.target);
 
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsOpen(false);
@@ -35,7 +36,7 @@ function Dropdown() {
   }, []);
 
   return (
-    <div ref={dropdownRef} className="relative w-64 text-sm font-medium">
+    <div ref={dropdownRef} className="relative w-full text-sm font-medium">
       <div
         onClick={() => setIsOpen(!isOpen)}
         className="flex justify-between items-center border border-gray-300 rounded-md px-4 py-3 cursor-pointer"

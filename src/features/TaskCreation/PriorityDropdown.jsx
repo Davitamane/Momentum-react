@@ -1,14 +1,14 @@
 import { useState, useRef, useEffect } from "react";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
+import { FaCheck, FaExclamation, FaArrowUp } from "react-icons/fa";
 
 const options = [
-  { label: "დასაწყები" },
-  { label: "პროგრესში" },
-  { label: "მზად ტესტირებისთვის" },
-  { label: "დასრულებული" },
+  { label: "დაბალი", icon: <FaCheck /> },
+  { label: "საშუალო", icon: <FaExclamation /> },
+  { label: "მაღალი", icon: <FaArrowUp /> },
 ];
 
-function Dropdown() {
+function PriorityDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(options[1]);
 
@@ -36,12 +36,18 @@ function Dropdown() {
   }, []);
 
   return (
-    <div ref={dropdownRef} className="relative w-full text-sm font-medium">
+    <div
+      ref={dropdownRef}
+      className="relative w-full text-sm font-medium bg-white"
+    >
       <div
         onClick={() => setIsOpen(!isOpen)}
         className="flex justify-between items-center border border-gray-300 rounded-md px-4 py-3 cursor-pointer"
       >
-        <div className="flex items-center gap-2">{selected.label}</div>
+        <div className="flex items-center gap-2">
+          {selected.icon}
+          {selected.label}
+        </div>
         {isOpen ? (
           <MdKeyboardArrowUp className="w-5 h-5" />
         ) : (
@@ -57,7 +63,10 @@ function Dropdown() {
               onClick={() => handleSelect(option)}
               className="px-4 py-3 flex items-center gap-2 hover:bg-purple-50 cursor-pointer"
             >
-              <span>{option.label}</span>
+              <span className="flex items-center gap-2">
+                {option.icon}
+                {option.label}
+              </span>
             </div>
           ))}
         </div>
@@ -66,4 +75,4 @@ function Dropdown() {
   );
 }
 
-export default Dropdown;
+export default PriorityDropdown;

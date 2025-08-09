@@ -4,7 +4,7 @@ import TaskType from "../ui/TaskType";
 import { PiClock } from "react-icons/pi";
 import { GoPerson } from "react-icons/go";
 import { IoCalendarClearOutline } from "react-icons/io5";
-import Dropdown from "../features/TaskDetails/Dropdown";
+import Dropdown from "../ui/Dropdown";
 import image from "../assets/test.jpeg";
 import CommentContainer from "../features/TaskDetails/CommentContainer";
 

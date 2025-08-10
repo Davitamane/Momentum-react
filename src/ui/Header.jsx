@@ -3,8 +3,10 @@ import Logo from "../assets/Logo.svg";
 import Plus from "../assets/add.svg";
 
 import Button from "./Button";
+import { useState } from "react";
 
 function Header() {
+  const [openModal, setOpenModal] = useState(false);
   return (
     <header className="flex items-center justify-between mx-auto max-w-screen">
       <Link to="/">
@@ -12,11 +14,13 @@ function Header() {
       </Link>
 
       <div className="flex space-x-6">
-        <Button type="secondary">თანამშრომლის შექმნა</Button>
+        <Button type="secondary" onClick={() => setOpenModal(!openModal)}>
+          თანამშრომლის შექმნა
+        </Button>
         <NavLink to="create">
           <Button>
             <img src={Plus} />
-            {"     "} შექმენით ახალი დავალება
+            შექმენით ახალი დავალება
           </Button>
         </NavLink>
       </div>

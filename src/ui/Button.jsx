@@ -4,6 +4,7 @@ const baseStyles =
 const typeStyles = {
   primary: "bg-main text-white border-2 border-main rounded-md",
   secondary: "bg-white border border-main rounded-md border-2",
+  rounded: "rounded-full bg-main text-white px-10",
 };
 
 function Button({ children, onClick, type = "primary" }) {

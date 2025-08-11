@@ -3,10 +3,12 @@ import Logo from "../assets/Logo.svg";
 import Plus from "../assets/add.svg";
 
 import Button from "./Button";
-import { useState } from "react";
+import { useContext } from "react";
+import { ModalContext } from "../context/ModalContext";
 
 function Header() {
-  const [openModal, setOpenModal] = useState(false);
+  const { isModalOpen, setIsModalOpen } = useContext(ModalContext);
+
   return (
     <header className="flex items-center justify-between mx-auto max-w-screen">
       <Link to="/">
@@ -14,7 +16,7 @@ function Header() {
       </Link>
 
       <div className="flex space-x-6">
-        <Button type="secondary" onClick={() => setOpenModal(!openModal)}>
+        <Button type="secondary" onClick={() => setIsModalOpen(!isModalOpen)}>
           თანამშრომლის შექმნა
         </Button>
         <NavLink to="create">

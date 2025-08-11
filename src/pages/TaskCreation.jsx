@@ -1,10 +1,14 @@
+import { useContext } from "react";
 import PriorityDropdown from "../features/TaskCreation/PriorityDropdown";
 import Button from "../ui/Button";
 import CalendarInput from "../ui/CalendarInput";
 import Dropdown from "../ui/Dropdown";
 import Validation from "../ui/Validation";
+import { ModalContext } from "../context/ModalContext";
+import Input from "../ui/Input";
 
 function TaskCreation() {
+  const { setIsModalOpen } = useContext(ModalContext);
   return (
     <>
       <h1 className="text-2xl font-extrabold pt-10 pb-5">
@@ -12,65 +16,45 @@ function TaskCreation() {
       </h1>
       <div className="w-full h-fit bg-background p-16">
         <div className="grid grid-cols-2 w-full gap-x-32 gap-y-10">
-          <div className="h-fit">
-            <p>
-              აღწერა<span>*</span>
-            </p>
+          <Input text="სათაური">
             <input
               type="text"
               className="w-full text-sm focus:border-2 bg-white border border-gray-300 rounded-md resize-none focus:outline-none focus:border-2flex justify-between items-center px-4 py-3"
             />
             <Validation />
-          </div>
-
-          <div className="w-full">
-            <p>
-              დეპარტამენტი<span>*</span>
-            </p>
+          </Input>
+          <Input text="დეპარტამენტი">
             <Dropdown />
-          </div>
-
-          <div>
-            <p>სათაური</p>
+          </Input>
+          
+          <Input text="სათაური">
             <textarea
               name="comment"
               className="w-full h-32 text-sm bg-white border border-gray-300 rounded-md resize-none focus:outline-none focus:border-2 p-4"
-            ></textarea>
+            />
             <Validation />
-          </div>
-
-          <div className="w-full">
-            <p>
-              პასუხისმგებელი თანამშრომელი<span>*</span>
-            </p>
+          </Input>
+          <Input text="პასუხისმგებელი თანამშრომელი">
             <Dropdown />
-          </div>
-
+          </Input>
           <div className="flex justify-between gap-8">
-            <div className="w-full">
-              <p>
-                პრიორიტეტი<span>*</span>
-              </p>
+            <Input text="პრიორიტეტი">
               <PriorityDropdown />
-            </div>
-            <div className="w-full">
-              <p>
-                სტატუსი<span>*</span>
-              </p>
+            </Input>
+
+            <Input text="სტატუსი">
               <Dropdown />
-            </div>
+            </Input>
           </div>
-          <div className="w-full">
-            <p>
-              სტატუსი<span>*</span>
-            </p>
+          <Input text="სტატუსი">
             <CalendarInput />
-          </div>
+          </Input>
         </div>
 
         <div className="w-full flex justify-end mt-16">
           <Button>დავალების შექმნა</Button>
         </div>
+        <button onClick={() => setIsModalOpen(true)}>test button</button>
       </div>
     </>
   );

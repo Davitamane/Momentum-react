@@ -8,7 +8,7 @@ const options = [
   { label: "დასრულებული" },
 ];
 
-function Dropdown() {
+function Dropdown({ customClassName }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(options[1]);
 
@@ -36,7 +36,10 @@ function Dropdown() {
   }, []);
 
   return (
-    <div ref={dropdownRef} className="relative w-full text-sm font-medium bg-white">
+    <div
+      ref={dropdownRef}
+      className="relative w-full text-sm font-medium bg-white"
+    >
       <div
         onClick={() => setIsOpen(!isOpen)}
         className="flex justify-between items-center border border-gray-300 rounded-md px-4 py-3 cursor-pointer"

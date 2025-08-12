@@ -8,7 +8,7 @@ const options = [
   { label: "დასრულებული" },
 ];
 
-function Dropdown({ customClassName }) {
+function Dropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(options[1]);
 

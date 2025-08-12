@@ -5,10 +5,44 @@ import { PiClock } from "react-icons/pi";
 import { GoPerson } from "react-icons/go";
 import { IoCalendarClearOutline } from "react-icons/io5";
 import Dropdown from "../ui/Dropdown";
-import image from "../assets/test.jpeg";
 import CommentContainer from "../features/TaskDetails/CommentContainer";
+import { useParams } from "react-router-dom";
+import { getSingleTask } from "../services/apiQuery";
+import { useQuery } from "@tanstack/react-query";
+import { format } from "date-fns";
+import { ka } from "date-fns/locale";
 
 function TaskDetails() {
+  const { id } = useParams();
+
+  const taskQuery = useQuery({
+    queryKey: ["task", id],
+    queryFn: () => getSingleTask(id),
+  });
+  if (taskQuery.status !== "success") return null;
+
+  // if (taskQuery.status === "loading") return null;
+
+  console.log(taskQuery.data);
+
+  const {
+    priority,
+    department,
+    name: title,
+    description,
+    employee: {
+      avatar,
+      department: { name: depName },
+      name,
+      surname,
+    },
+    due_date,
+  } = taskQuery.data;
+
+  const weekday = format(new Date(due_date), "EEE", { locale: ka });
+  const formattedDate = format(new Date(due_date), "dd/MM/yyyy");
+  const fullDateString = `${weekday} - ${formattedDate}`;
+
   return (
     <div className="pt-10 w-full flex gap-20">
       {/* Container 1 */}
@@ -16,18 +50,11 @@ function TaskDetails() {
         {/* First half */}
         <div>
           <div className="flex gap-4">
-            <TaskImportance type="big" children="დაბალი" />
-            <TaskType type="big" children="დიზაინი" />
+            <TaskImportance type="big" priority={priority} />
+            <TaskType department={department} />
           </div>
-          <h1 className="pt-2.5 pb-4.5 font-bold text-2xl">
-            Redberry-ს საიტის ლენდინგის დიზაინი
-          </h1>
-          <p className="text-sm">
-            მიზანია რომ შეიქმნას თანამედროვე, სუფთა და ფუნქციონალური დიზაინი,
-            რომელიც უზრუნველყოფს მარტივ ნავიგაციას და მკაფიო ინფორმაციის
-            გადაცემას. დიზაინი უნდა იყოს ადაპტირებადი (responsive), გამორჩეული
-            ვიზუალით, მინიმალისტური სტილით და ნათელი ტიპოგრაფიით.
-          </p>
+          <h1 className="pt-2.5 pb-4.5 font-bold text-2xl">{title}</h1>
+          <p className="text-sm">{description}</p>
         </div>
         {/* Second half */}
         <div>
@@ -45,17 +72,19 @@ function TaskDetails() {
               <p>თანამშრომელი</p>
             </TaskDetailsStatuses>
             <div className="inline-flex gap-2 items-center">
-              <img src={image} alt="test" className="w-8 h-8 rounded-full" />
+              <img src={avatar} alt="test" className="w-8 h-8 rounded-full" />
               <div className="flex flex-col">
-                <p className="text-xs text-gray-500">დიზაინის დეპარტამენტი</p>
-                <h3>ელარია ბაგრატიონი</h3>
+                <p className="text-xs text-gray-500">{depName}</p>
+                <h3>
+                  {name} {surname}
+                </h3>
               </div>
             </div>
             <TaskDetailsStatuses>
               <IoCalendarClearOutline className="w-7 h-7" />
               <p>დავალების ვადა</p>
             </TaskDetailsStatuses>
-            <div className="flex items-center">ორშ - 02/2/2025</div>
+            <div className="flex items-center">{fullDateString}</div>
           </div>
         </div>
       </div>

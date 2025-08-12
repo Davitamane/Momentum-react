@@ -12,9 +12,9 @@ function TasksInnerContainer({ id, name }) {
 
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-">
       <TaskStage children={name} id={id} />
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-4">
         {tasksQuery.data?.map(
           (task) => task.status.id === id && <Task key={task.id} data={task} />
         )}

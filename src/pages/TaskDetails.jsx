@@ -23,7 +23,7 @@ function TaskDetails() {
 
   // if (taskQuery.status === "loading") return null;
 
-  console.log(taskQuery.data);
+  // console.log(taskQuery.data);
 
   const {
     priority,
@@ -90,7 +90,7 @@ function TaskDetails() {
       </div>
 
       {/* Container 2 */}
-      <CommentContainer />
+      <CommentContainer taskId={id}/>
     </div>
   );
 }

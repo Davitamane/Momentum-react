@@ -34,3 +34,15 @@ export async function getSingleTask(id) {
 
   return data;
 }
+
+export async function getComments(id) {
+  const res = await fetch(`${API_LINK}/tasks/${id}/comments`, {
+    headers: {
+      Authorization: `Bearer ${API_KEY}`,
+    },
+  });
+  if (!res.ok) throw new Error("Failed to fetch statuses");
+  const data = await res.json();
+
+  return data;
+}

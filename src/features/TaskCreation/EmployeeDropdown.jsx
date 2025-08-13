@@ -1,12 +1,15 @@
 import { useState, useRef, useEffect } from "react";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
+import { CiCirclePlus } from "react-icons/ci";
+import { useContext } from "react";
+import { ModalContext } from "../../context/ModalContext";
 
-function PriorityDropdown({ data }) {
+function EmployeeDropdown({ data }) {
   console.log(data);
+  const { setIsModalOpen } = useContext(ModalContext);
 
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState(data[1]);
-  console.log(data[1]);
+  const [selected, setSelected] = useState();
 
   const dropdownRef = useRef(null);
 
@@ -41,8 +44,18 @@ function PriorityDropdown({ data }) {
         className="flex justify-between items-center border border-gray-300 rounded-md px-4 py-3 cursor-pointer"
       >
         <div className="flex items-center gap-2">
-          <img src={selected.icon} />
-          {selected.name}
+          {selected ? (
+            <>
+              <img
+                className="w-8 h-8 rounded-full object-cover object-center"
+                src={selected.avatar}
+                alt={`${selected.name} ${selected.surname}`}
+              />
+              {selected.name} {selected.surname}
+            </>
+          ) : (
+            <span className="text-gray-400"></span>
+          )}
         </div>
         {isOpen ? (
           <MdKeyboardArrowUp className="w-5 h-5" />
@@ -53,6 +66,16 @@ function PriorityDropdown({ data }) {
 
       {isOpen && (
         <div className="absolute z-10 bg-white border border-purple-300 rounded-md w-full shadow-md">
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="px-4 py-3 flex items-center gap-2 hover:bg-purple-50 cursor-pointer w-full"
+          >
+            <span className="flex items-center gap-2 text-main">
+              <CiCirclePlus className="size-6" />
+              დაამატე ახალი თანამშრომელი
+            </span>
+          </button>
+
           {data.map((option) => (
             <div
               key={option.id}
@@ -60,8 +83,11 @@ function PriorityDropdown({ data }) {
               className="px-4 py-3 flex items-center gap-2 hover:bg-purple-50 cursor-pointer"
             >
               <span className="flex items-center gap-2">
-                <img src={option.icon} />
-                {option.name}
+                <img
+                  src={option.avatar}
+                  className="w-8 h-8 rounded-full object-cover object-center"
+                />
+                {option.name} {option.surname}
               </span>
             </div>
           ))}
@@ -71,4 +97,4 @@ function PriorityDropdown({ data }) {
   );
 }
 
-export default PriorityDropdown;
+export default EmployeeDropdown;

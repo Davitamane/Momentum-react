@@ -7,7 +7,7 @@ import { IoCalendarClearOutline } from "react-icons/io5";
 import Dropdown from "../ui/Dropdown";
 import CommentContainer from "../features/TaskDetails/CommentContainer";
 import { useParams } from "react-router-dom";
-import { getSingleTask } from "../services/apiQuery";
+import { getSingleTask, getStatuses } from "../services/apiQuery";
 import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { ka } from "date-fns/locale";
@@ -19,11 +19,16 @@ function TaskDetails() {
     queryKey: ["task", id],
     queryFn: () => getSingleTask(id),
   });
-  if (taskQuery.status !== "success") return null;
 
+  const statusesQuery = useQuery({
+    queryKey: ["statuses"],
+    queryFn: () => getStatuses(),
+  });
   // if (taskQuery.status === "loading") return null;
 
   // console.log(taskQuery.data);
+
+  if (taskQuery.status !== "success") return null;
 
   const {
     priority,
@@ -37,7 +42,9 @@ function TaskDetails() {
       surname,
     },
     due_date,
+    status,
   } = taskQuery.data;
+  console.log(status.id);
 
   const weekday = format(new Date(due_date), "EEE", { locale: ka });
   const formattedDate = format(new Date(due_date), "dd/MM/yyyy");
@@ -66,7 +73,7 @@ function TaskDetails() {
               <PiClock className="w-7 h-7" />
               <p>სტატუსი</p>
             </TaskDetailsStatuses>
-            <Dropdown />
+            <Dropdown data={statusesQuery.data} def={status.id - 1} />
             <TaskDetailsStatuses>
               <GoPerson className="w-7 h-7" />
               <p>თანამშრომელი</p>

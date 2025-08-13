@@ -8,10 +8,17 @@ import { CiImageOn } from "react-icons/ci";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import Dropdown from "./Dropdown";
 import Button from "./Button";
+import { useQuery } from "@tanstack/react-query";
+import { getDepartments } from "../services/apiQuery";
 
 function Modal() {
   const { isModalOpen, setIsModalOpen } = useContext(ModalContext);
   const [image, setImage] = useState(null);
+
+  const departmentsQuery = useQuery({
+    queryKey: ["departments"],
+    queryFn: () => getDepartments(),
+  });
 
   function handleFileChange(e) {
     const file = e.target.files[0];
@@ -23,6 +30,10 @@ function Modal() {
     };
     reader.readAsDataURL(file);
   }
+  function handleClose() {
+    setIsModalOpen(!isModalOpen);
+    setImage(null);
+  }
 
   if (!isModalOpen) return null;
 
@@ -30,7 +41,7 @@ function Modal() {
     <div className="fixed top-0 left-0 w-full h-screen bg-black/20 flex items-center justify-center z-50 backdrop-blur-[3px]">
       <div className="flex w-3/5 justify-center flex-col gap-6 bg-white p-8 rounded-lg shadow-lg">
         <div className="flex w-full justify-end">
-          <button onClick={() => setIsModalOpen(!isModalOpen)}>
+          <button onClick={() => handleClose()}>
             <TbXboxX className="size-8 text-gray-400" />
           </button>
         </div>
@@ -90,7 +101,7 @@ function Modal() {
         </div>
         <div className="grid grid-cols-2 gap-20">
           <Input text="დეპარტამენტი">
-            <Dropdown />
+            <Dropdown data={departmentsQuery.data} />
           </Input>
         </div>
 

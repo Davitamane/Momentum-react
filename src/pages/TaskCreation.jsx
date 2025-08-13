@@ -1,10 +1,8 @@
-import { useContext } from "react";
 import PriorityDropdown from "../features/TaskCreation/PriorityDropdown";
 import Button from "../ui/Button";
 import CalendarInput from "../ui/CalendarInput";
 import Dropdown from "../ui/Dropdown";
 import Validation from "../ui/Validation";
-import { ModalContext } from "../context/ModalContext";
 import Input from "../ui/Input";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -13,6 +11,7 @@ import {
   getPriorities,
   getStatuses,
 } from "../services/apiQuery";
+import EmployeeDropdown from "../features/TaskCreation/EmployeeDropdown";
 
 function TaskCreation() {
   // const [formData, setFormData] = useState({
@@ -24,7 +23,6 @@ function TaskCreation() {
   //   dueDate: null,
   // });
 
-  const { setIsModalOpen } = useContext(ModalContext);
   const statusesQuery = useQuery({
     queryKey: ["statuses"],
     queryFn: () => getStatuses(),
@@ -52,7 +50,7 @@ function TaskCreation() {
 
   console.log(
     // statusesQuery.data,
-    prioritiesQuery.data,
+    prioritiesQuery.data
     // departmentsQuery.data,
     // employeesQuery.data
   );
@@ -83,7 +81,7 @@ function TaskCreation() {
             <Validation />
           </Input>
           <Input text="პასუხისმგებელი თანამშრომელი">
-            <PriorityDropdown data={employeesQuery.data} />
+            <EmployeeDropdown data={employeesQuery.data} />
           </Input>
           <div className="flex justify-between gap-8">
             <Input text="პრიორიტეტი">
@@ -102,7 +100,6 @@ function TaskCreation() {
         <div className="w-full flex justify-end mt-16">
           <Button>დავალების შექმნა</Button>
         </div>
-        <button onClick={() => setIsModalOpen(true)}>test button</button>
       </div>
     </>
   );

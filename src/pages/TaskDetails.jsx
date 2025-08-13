@@ -90,7 +90,7 @@ function TaskDetails() {
       </div>
 
       {/* Container 2 */}
-      <CommentContainer taskId={id}/>
+      <CommentContainer taskId={id} />
     </div>
   );
 }

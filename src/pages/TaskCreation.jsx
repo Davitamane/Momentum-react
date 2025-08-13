@@ -6,9 +6,57 @@ import Dropdown from "../ui/Dropdown";
 import Validation from "../ui/Validation";
 import { ModalContext } from "../context/ModalContext";
 import Input from "../ui/Input";
+import { useQuery } from "@tanstack/react-query";
+import {
+  getDepartments,
+  getEmployees,
+  getPriorities,
+  getStatuses,
+} from "../services/apiQuery";
 
 function TaskCreation() {
+  // const [formData, setFormData] = useState({
+  //   title: "",
+  //   description: "",
+  //   department: "",
+  //   priority: "",
+  //   status: "",
+  //   dueDate: null,
+  // });
+
   const { setIsModalOpen } = useContext(ModalContext);
+  const statusesQuery = useQuery({
+    queryKey: ["statuses"],
+    queryFn: () => getStatuses(),
+  });
+
+  const prioritiesQuery = useQuery({
+    queryKey: ["priorities"],
+    queryFn: () => getPriorities(),
+  });
+
+  const departmentsQuery = useQuery({
+    queryKey: ["departments"],
+    queryFn: () => getDepartments(),
+  });
+
+  const employeesQuery = useQuery({
+    queryKey: ["employees"],
+    queryFn: () => getEmployees(),
+  });
+
+  if (statusesQuery.status !== "success") return null;
+  if (prioritiesQuery.status !== "success") return null;
+  if (departmentsQuery.status !== "success") return null;
+  if (employeesQuery.status !== "success") return null;
+
+  console.log(
+    // statusesQuery.data,
+    prioritiesQuery.data,
+    // departmentsQuery.data,
+    // employeesQuery.data
+  );
+
   return (
     <>
       <h1 className="text-2xl font-extrabold pt-10 pb-5">
@@ -24,9 +72,9 @@ function TaskCreation() {
             <Validation />
           </Input>
           <Input text="დეპარტამენტი">
-            <Dropdown />
+            <Dropdown data={departmentsQuery.data} />
           </Input>
-          
+
           <Input text="სათაური">
             <textarea
               name="comment"
@@ -35,15 +83,15 @@ function TaskCreation() {
             <Validation />
           </Input>
           <Input text="პასუხისმგებელი თანამშრომელი">
-            <Dropdown />
+            <PriorityDropdown data={employeesQuery.data} />
           </Input>
           <div className="flex justify-between gap-8">
             <Input text="პრიორიტეტი">
-              <PriorityDropdown />
+              <PriorityDropdown data={prioritiesQuery.data} />
             </Input>
 
             <Input text="სტატუსი">
-              <Dropdown />
+              <Dropdown data={statusesQuery.data} def={0} />
             </Input>
           </div>
           <Input text="სტატუსი">

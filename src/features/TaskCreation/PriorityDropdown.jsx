@@ -2,15 +2,12 @@ import { useState, useRef, useEffect } from "react";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { FaCheck, FaExclamation, FaArrowUp } from "react-icons/fa";
 
-const options = [
-  { label: "დაბალი", icon: <FaCheck /> },
-  { label: "საშუალო", icon: <FaExclamation /> },
-  { label: "მაღალი", icon: <FaArrowUp /> },
-];
+function PriorityDropdown({ data }) {
+  console.log(data);
 
-function PriorityDropdown() {
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState(options[1]);
+  const [selected, setSelected] = useState(data[1]);
+  console.log(data[1]);
 
   const dropdownRef = useRef(null);
 
@@ -45,8 +42,8 @@ function PriorityDropdown() {
         className="flex justify-between items-center border border-gray-300 rounded-md px-4 py-3 cursor-pointer"
       >
         <div className="flex items-center gap-2">
-          {selected.icon}
-          {selected.label}
+          <img src={selected.icon} />
+          {selected.name}
         </div>
         {isOpen ? (
           <MdKeyboardArrowUp className="w-5 h-5" />
@@ -57,15 +54,15 @@ function PriorityDropdown() {
 
       {isOpen && (
         <div className="absolute z-10 bg-white border border-purple-300 rounded-md w-full shadow-md">
-          {options.map((option) => (
+          {data.map((option) => (
             <div
-              key={option.label}
+              key={option.id}
               onClick={() => handleSelect(option)}
               className="px-4 py-3 flex items-center gap-2 hover:bg-purple-50 cursor-pointer"
             >
               <span className="flex items-center gap-2">
-                {option.icon}
-                {option.label}
+                <img src={option.icon} />
+                {option.name}
               </span>
             </div>
           ))}

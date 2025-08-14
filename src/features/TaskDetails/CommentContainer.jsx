@@ -4,6 +4,7 @@ import Commenting from "./Commenting";
 import { getComments } from "../../services/apiQuery";
 
 function CommentContainer({ taskId }) {
+
   const commentsQuery = useQuery({
     queryKey: ["comments", taskId],
     queryFn: () => getComments(taskId),
@@ -12,7 +13,6 @@ function CommentContainer({ taskId }) {
 
   let count = 0;
   commentsQuery.data?.forEach((comment) => {
-
     if (comment.sub_comments.length > 0) count += comment.sub_comments.length;
 
     count++;
@@ -20,7 +20,7 @@ function CommentContainer({ taskId }) {
 
   return (
     <div className="w-dvh h-fit bg-background rounded-md border border-outline p-8 flex flex-col gap-8">
-      <Commenting />
+      <Commenting taskId={taskId} />
       <div className="flex flex-col gap-6">
         <div className="flex gap-2 items-center">
           <h1 className="text-xl font-semibold">კომენტარები</h1>

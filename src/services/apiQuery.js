@@ -1,17 +1,34 @@
 import { API_KEY, API_LINK } from "../constants";
 
 async function fetchFromAPI(link) {
-  const res = await fetch(`${API_LINK}${link}`, {
+  const res = await fetch(link, {
     headers: { Authorization: `Bearer ${API_KEY}` },
   });
   if (!res.ok) throw new Error(`Failed to fetch ${link}`);
   return res.json();
 }
 
-export const getTasks = () => fetchFromAPI("/tasks");
-export const getStatuses = () => fetchFromAPI("/statuses");
-export const getSingleTask = (id) => fetchFromAPI(`/tasks/${id}`);
-export const getComments = (id) => fetchFromAPI(`/tasks/${id}/comments`);
-export const getPriorities = () => fetchFromAPI("/priorities");
-export const getDepartments = () => fetchFromAPI("/departments");
-export const getEmployees = () => fetchFromAPI("/employees");
+async function postToAPI(link, body) {
+  const res = await fetch(`${link}`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${API_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!res.ok) throw new Error(`Failed to post to ${link}`);
+  return res.json();
+}
+
+export const getTasks = () => fetchFromAPI("/api/tasks");
+export const getStatuses = () => fetchFromAPI("/api/statuses");
+export const getSingleTask = (id) => fetchFromAPI(`/api/tasks/${id}`);
+export const getComments = (id) => fetchFromAPI(`/api/tasks/${id}/comments`);
+export const getPriorities = () => fetchFromAPI("/api/priorities");
+export const getDepartments = () => fetchFromAPI("/api/departments");
+export const getEmployees = () => fetchFromAPI("/api/employees");
+
+export const postComment = (id, commentData) =>
+  postToAPI(`/api/tasks/${id}/comments`, commentData);

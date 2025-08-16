@@ -21,6 +21,22 @@ async function postToAPI(link, body) {
   if (!res.ok) throw new Error(`Failed to post to ${link}`);
   return res.json();
 }
+async function postToAPIForm(link, body, isFormData = false) {
+  const res = await fetch(`${link}`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${API_KEY}`,
+      ...(isFormData ? {} : { "Content-Type": "application/json" }),
+    },
+    body: isFormData ? body : JSON.stringify(body),
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Failed to post to ${link}: ${text}`);
+  }
+  return res.json();
+}
 
 export const getTasks = () => fetchFromAPI("/api/tasks");
 export const getStatuses = () => fetchFromAPI("/api/statuses");
@@ -32,3 +48,6 @@ export const getEmployees = () => fetchFromAPI("/api/employees");
 
 export const postComment = (id, commentData) =>
   postToAPI(`/api/tasks/${id}/comments`, commentData);
+
+export const postEmployee = (modalData) =>
+  postToAPIForm("/api/employees", modalData);

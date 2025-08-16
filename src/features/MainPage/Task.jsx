@@ -6,7 +6,7 @@ import { ka } from "date-fns/locale";
 import { Link } from "react-router-dom";
 
 function Task({ data }) {
-  console.log(data);
+  // console.log(data);
   const {
     name: title,
     employee: { avatar },

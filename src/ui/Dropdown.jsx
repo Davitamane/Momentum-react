@@ -1,17 +1,20 @@
 import { useState, useRef, useEffect } from "react";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 
-function Dropdown({ data, def }) {
+function Dropdown({ data, def, setState }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(
     def !== undefined && data[def] ? data[def] : ""
   );
+
+  // console.log(data);
 
   const dropdownRef = useRef(null);
 
   const handleSelect = (option) => {
     setSelected(option);
     setIsOpen(false);
+    setState(option.id);
   };
 
   useEffect(() => {

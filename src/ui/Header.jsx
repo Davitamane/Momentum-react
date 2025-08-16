@@ -16,7 +16,10 @@ function Header() {
       </Link>
 
       <div className="flex space-x-6">
-        <Button type="secondary" onClick={() => setIsModalOpen(!isModalOpen)}>
+        <Button
+          styleType="secondary"
+          onClick={() => setIsModalOpen(!isModalOpen)}
+        >
           თანამშრომლის შექმნა
         </Button>
         <NavLink to="create">

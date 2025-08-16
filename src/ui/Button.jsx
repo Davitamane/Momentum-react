@@ -7,11 +7,11 @@ const typeStyles = {
   rounded: "rounded-full bg-main text-white px-10",
 };
 
-function Button({ children, onClick, type = "primary" }) {
-  const style = `${baseStyles} ${typeStyles[type]}`;
+function Button({ children, onClick, styleType = "primary", type }) {
+  const style = `${baseStyles} ${typeStyles[styleType]}`;
 
   return (
-    <button className={style} onClick={onClick}>
+    <button className={style} onClick={onClick} type={type}>
       {children}
     </button>
   );

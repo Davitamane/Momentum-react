@@ -8,12 +8,45 @@ import { CiImageOn } from "react-icons/ci";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import Dropdown from "./Dropdown";
 import Button from "./Button";
-import { useQuery } from "@tanstack/react-query";
-import { getDepartments } from "../services/apiQuery";
+import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import { getDepartments, postEmployee } from "../services/apiQuery";
+import { useForm } from "react-hook-form";
+
+// const mutation = useMutation({
+//   mutationFn: (modalData) => postEmployee(modalData),
+//   onSuccess: () => {
+//     QueryClient.invalidateQueries(["tasks"]);
+//   },
+//   onError: (error) => {
+//     console.error("failed to send", error);
+//   },
+// });
+// function handleSubmit(e) {
+//   e.preventDefault();
+// mutation.mutate({
+//   name: name,
+//   surname: surname,
+//   avatar: image,
+//   department_id: departmentId,
+// });
+// }
 
 function Modal() {
   const { isModalOpen, setIsModalOpen } = useContext(ModalContext);
   const [image, setImage] = useState(null);
+  const [departmentId, setDepartmentId] = useState(null);
+
+  const { mutate, isLoading } = useMutation({
+    mutationFn: postEmployee,
+    onSuccess: () => {
+      QueryClient.invalidateQueries(["tasks"]);
+    },
+    onError: (error) => {
+      console.error("failed to send", error);
+    },
+  });
+
+  const { register, handleSubmit, reset } = useForm();
 
   const departmentsQuery = useQuery({
     queryKey: ["departments"],
@@ -23,12 +56,12 @@ function Modal() {
   function handleFileChange(e) {
     const file = e.target.files[0];
     if (!file) return;
-    console.log(file);
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      setImage(e.target.result);
-    };
-    reader.readAsDataURL(file);
+
+    setImage(file); // store the File, not base64
+  }
+
+  function onSubmit(data) {
+    mutate({ ...data, avatar: image, department_id: departmentId });
   }
   function handleClose() {
     setIsModalOpen(!isModalOpen);
@@ -39,7 +72,10 @@ function Modal() {
 
   return createPortal(
     <div className="fixed top-0 left-0 w-full h-screen bg-black/20 flex items-center justify-center z-50 backdrop-blur-[3px]">
-      <div className="flex w-3/5 justify-center flex-col gap-6 bg-white p-8 rounded-lg shadow-lg">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex w-3/5 justify-center flex-col gap-6 bg-white p-8 rounded-lg shadow-lg"
+      >
         <div className="flex w-full justify-end">
           <button onClick={() => handleClose()}>
             <TbXboxX className="size-8 text-gray-400" />
@@ -53,6 +89,7 @@ function Modal() {
             <input
               type="text"
               className="w-full text-sm focus:border-2 bg-white border border-gray-300 rounded-md resize-none focus:outline-none focus:border-2flex justify-between items-center px-4 py-3"
+              {...register("name")}
             />
             <Validation customClassName="flex flex-col mt-1" />
           </Input>
@@ -60,6 +97,7 @@ function Modal() {
             <input
               type="text"
               className="w-full text-sm focus:border-2 bg-white border border-gray-300 rounded-md resize-none focus:outline-none focus:border-2flex justify-between items-center px-4 py-3"
+              {...register("surname")}
             />
             <Validation customClassName="flex flex-col mt-1" />
           </Input>
@@ -79,7 +117,7 @@ function Modal() {
           {image ? (
             <div className="relative">
               <img
-                src={image}
+                src={URL.createObjectURL(image)}
                 className="w-20 h-20 mb-1 rounded-full object-cover object-center"
               />
               <button
@@ -101,15 +139,24 @@ function Modal() {
         </div>
         <div className="grid grid-cols-2 gap-20">
           <Input text="დეპარტამენტი">
-            <Dropdown data={departmentsQuery.data} />
+            <Dropdown data={departmentsQuery.data} setState={setDepartmentId} />
           </Input>
         </div>
 
         <div className="flex justify-end gap-4">
-          <Button type="secondary">გაუქმება</Button>
-          <Button>დაამატე თანამშრომელი</Button>
+          <Button
+            styleType="secondary"
+            onClick={() => {
+              reset();
+              handleClose();
+            }}
+          >
+            გაუქმება
+          </Button>
+
+          <Button type="submit">დაამატე თანამშრომელი</Button>
         </div>
-      </div>
+      </form>
     </div>,
     document.body
   );

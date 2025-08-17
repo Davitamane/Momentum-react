@@ -1,4 +1,4 @@
-import { API_KEY, API_LINK } from "../constants";
+import { API_KEY } from "../constants";
 
 async function fetchFromAPI(link) {
   const res = await fetch(link, {
@@ -12,6 +12,7 @@ async function postToAPI(link, body) {
   const res = await fetch(`${link}`, {
     method: "POST",
     headers: {
+      accept: "application/json",
       Authorization: `Bearer ${API_KEY}`,
       "Content-Type": "application/json",
     },
@@ -21,22 +22,30 @@ async function postToAPI(link, body) {
   if (!res.ok) throw new Error(`Failed to post to ${link}`);
   return res.json();
 }
-async function postToAPIForm(link, body, isFormData = false) {
-  const res = await fetch(`${link}`, {
+export const postToAPIForm = async (link, modalData) => {
+  const formData = new FormData();
+  formData.append("name", modalData.name);
+  formData.append("surname", modalData.surname);
+  formData.append("avatar", modalData.avatar);
+  formData.append("department_id", modalData.department_id);
+
+  const res = await fetch(link, {
     method: "POST",
     headers: {
+      Accept: "application/json",
       Authorization: `Bearer ${API_KEY}`,
-      ...(isFormData ? {} : { "Content-Type": "application/json" }),
     },
-    body: isFormData ? body : JSON.stringify(body),
+    body: formData,
   });
+  console.log(formData);
 
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`Failed to post to ${link}: ${text}`);
+    throw new Error(`Failed to post employee: ${text}`);
   }
+
   return res.json();
-}
+};
 
 export const getTasks = () => fetchFromAPI("/api/tasks");
 export const getStatuses = () => fetchFromAPI("/api/statuses");

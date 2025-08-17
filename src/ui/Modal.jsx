@@ -8,45 +8,29 @@ import { CiImageOn } from "react-icons/ci";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import Dropdown from "./Dropdown";
 import Button from "./Button";
-import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import { getDepartments, postEmployee } from "../services/apiQuery";
 import { useForm } from "react-hook-form";
-
-// const mutation = useMutation({
-//   mutationFn: (modalData) => postEmployee(modalData),
-//   onSuccess: () => {
-//     QueryClient.invalidateQueries(["tasks"]);
-//   },
-//   onError: (error) => {
-//     console.error("failed to send", error);
-//   },
-// });
-// function handleSubmit(e) {
-//   e.preventDefault();
-// mutation.mutate({
-//   name: name,
-//   surname: surname,
-//   avatar: image,
-//   department_id: departmentId,
-// });
-// }
+import { toast } from "react-toastify";
 
 function Modal() {
   const { isModalOpen, setIsModalOpen } = useContext(ModalContext);
   const [image, setImage] = useState(null);
   const [departmentId, setDepartmentId] = useState(null);
 
+  const queryClient = useQueryClient();
   const { mutate, isLoading } = useMutation({
     mutationFn: postEmployee,
     onSuccess: () => {
-      QueryClient.invalidateQueries(["tasks"]);
+      queryClient.invalidateQueries(["tasks"]);
+      toast.success("Successfully uploaded!");
     },
     onError: (error) => {
       console.error("failed to send", error);
     },
   });
 
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset, watch } = useForm();
 
   const departmentsQuery = useQuery({
     queryKey: ["departments"],
@@ -70,6 +54,9 @@ function Modal() {
 
   if (!isModalOpen) return null;
 
+  const name = watch("name");
+  const surname = watch("surname");
+
   return createPortal(
     <div className="fixed top-0 left-0 w-full h-screen bg-black/20 flex items-center justify-center z-50 backdrop-blur-[3px]">
       <form
@@ -89,17 +76,25 @@ function Modal() {
             <input
               type="text"
               className="w-full text-sm focus:border-2 bg-white border border-gray-300 rounded-md resize-none focus:outline-none focus:border-2flex justify-between items-center px-4 py-3"
-              {...register("name")}
+              {...register("name", {
+                required: "This field is required",
+                minLength: 2,
+                maxLength: 255,
+              })}
             />
-            <Validation customClassName="flex flex-col mt-1" />
+            <Validation customClassName="flex flex-col mt-1" text={name} />
           </Input>
           <Input text="გვარი">
             <input
               type="text"
               className="w-full text-sm focus:border-2 bg-white border border-gray-300 rounded-md resize-none focus:outline-none focus:border-2flex justify-between items-center px-4 py-3"
-              {...register("surname")}
+              {...register("surname", {
+                required: "This field is required",
+                minLength: 2,
+                maxLength: 255,
+              })}
             />
-            <Validation customClassName="flex flex-col mt-1" />
+            <Validation customClassName="flex flex-col mt-1" text={surname} />
           </Input>
         </div>
 

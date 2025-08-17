@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
-
+import { ToastContainer } from "react-toastify";
 
 function AppLayout() {
   return (
@@ -9,6 +9,7 @@ function AppLayout() {
       <main>
         <Outlet />
       </main>
+      <ToastContainer />
     </>
   );
 }

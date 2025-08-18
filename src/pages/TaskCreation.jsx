@@ -12,16 +12,12 @@ import {
   getStatuses,
 } from "../services/apiQuery";
 import EmployeeDropdown from "../features/TaskCreation/EmployeeDropdown";
+import { useState } from "react";
+import DescriptionValidation from "../features/TaskCreation/DescriptionValidation";
+import { useForm } from "react-hook-form";
 
 function TaskCreation() {
-  // const [formData, setFormData] = useState({
-  //   title: "",
-  //   description: "",
-  //   department: "",
-  //   priority: "",
-  //   status: "",
-  //   dueDate: null,
-  // });
+  const [departmentId, setDepartmentId] = useState(null);
 
   const statusesQuery = useQuery({
     queryKey: ["statuses"],
@@ -41,26 +37,34 @@ function TaskCreation() {
   const employeesQuery = useQuery({
     queryKey: ["employees"],
     queryFn: () => getEmployees(),
+    enabled: !!departmentId,
   });
+
+  const { register, handleSubmit } = useForm();
 
   if (statusesQuery.status !== "success") return null;
   if (prioritiesQuery.status !== "success") return null;
   if (departmentsQuery.status !== "success") return null;
-  if (employeesQuery.status !== "success") return null;
 
-  console.log(
-    // statusesQuery.data,
-    prioritiesQuery.data
-    // departmentsQuery.data,
-    // employeesQuery.data
-  );
+  let sortedEmployees = [];
+  if (employeesQuery.status === "success") {
+    sortedEmployees = employeesQuery.data.filter(
+      (employee) => employee.department_id === departmentId
+    );
+  }
+  function onSubmit(data) {
+    console.log(data);
+  }
 
   return (
     <>
       <h1 className="text-2xl font-extrabold pt-10 pb-5">
         შექმენით ახალი დავალება
       </h1>
-      <div className="w-full h-fit bg-background p-16">
+      <form
+        className="w-full h-fit bg-background p-16"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <div className="grid grid-cols-2 w-full gap-x-32 gap-y-10">
           <Input text="სათაური">
             <input
@@ -70,18 +74,25 @@ function TaskCreation() {
             <Validation />
           </Input>
           <Input text="დეპარტამენტი">
-            <Dropdown data={departmentsQuery.data} />
+            <Dropdown data={departmentsQuery.data} setState={setDepartmentId} />
           </Input>
 
-          <Input text="სათაური">
+          <Input text="აღწერა" required={false}>
             <textarea
               name="comment"
               className="w-full h-32 text-sm bg-white border border-gray-300 rounded-md resize-none focus:outline-none focus:border-2 p-4"
             />
-            <Validation />
+            <DescriptionValidation />
           </Input>
-          <Input text="პასუხისმგებელი თანამშრომელი">
-            <EmployeeDropdown data={employeesQuery.data} />
+          <Input
+            text="პასუხისმგებელი თანამშრომელი"
+            customClassName={departmentId ? "" : "text-gray-400"}
+          >
+            {departmentId ? (
+              <EmployeeDropdown data={sortedEmployees} />
+            ) : (
+              <div className="flex justify-between items-center border border-gray-300 rounded-md px-4 py-3 cursor-not-allowed min-h-[48px]"></div>
+            )}
           </Input>
           <div className="flex justify-between gap-8">
             <Input text="პრიორიტეტი">
@@ -92,7 +103,7 @@ function TaskCreation() {
               <Dropdown data={statusesQuery.data} def={0} />
             </Input>
           </div>
-          <Input text="სტატუსი">
+          <Input text="დედლაინი">
             <CalendarInput />
           </Input>
         </div>
@@ -100,7 +111,7 @@ function TaskCreation() {
         <div className="w-full flex justify-end mt-16">
           <Button>დავალების შექმნა</Button>
         </div>
-      </div>
+      </form>
     </>
   );
 }

@@ -19,6 +19,10 @@ function EmployeeDropdown({ data }) {
   };
 
   useEffect(() => {
+    setSelected(null);
+  }, [data]);
+
+  useEffect(() => {
     const handleClickOutside = (event) => {
       // console.log(event.target);
 
@@ -41,7 +45,7 @@ function EmployeeDropdown({ data }) {
     >
       <div
         onClick={() => setIsOpen(!isOpen)}
-        className="flex justify-between items-center border border-gray-300 rounded-md px-4 py-3 cursor-pointer"
+        className="flex justify-between items-center border border-gray-300 rounded-md px-4 cursor-pointer h-12"
       >
         <div className="flex items-center gap-2">
           {selected ? (

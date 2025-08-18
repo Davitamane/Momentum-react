@@ -1,9 +1,9 @@
-function Input({ children, text, customClassName }) {
+function Input({ children, text, customClassName, required = true }) {
   return (
     <div className={`w-full ${customClassName}`}>
       <p>
         {text}
-        <span>*</span>
+        {required ? <span>*</span> : null}
       </p>
       {children}
     </div>

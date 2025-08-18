@@ -2,11 +2,9 @@ import { useState, useRef, useEffect } from "react";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 
 function PriorityDropdown({ data }) {
-  console.log(data);
 
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(data[1]);
-  console.log(data[1]);
 
   const dropdownRef = useRef(null);
 

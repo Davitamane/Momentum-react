@@ -46,6 +46,9 @@ export const postToAPIForm = async (link, modalData) => {
 
   return res.json();
 };
+// export function postToAPITask = async (link, taskData) => {
+
+// }
 
 export const getTasks = () => fetchFromAPI("/api/tasks");
 export const getStatuses = () => fetchFromAPI("/api/statuses");

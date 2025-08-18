@@ -19,10 +19,10 @@ function Modal() {
   const [departmentId, setDepartmentId] = useState(null);
 
   const queryClient = useQueryClient();
-  const { mutate, isLoading } = useMutation({
+  const { mutate } = useMutation({
     mutationFn: postEmployee,
     onSuccess: () => {
-      queryClient.invalidateQueries(["tasks"]);
+      queryClient.invalidateQueries(["employees"]);
       toast.success("Successfully uploaded!");
     },
     onError: (error) => {
@@ -30,7 +30,14 @@ function Modal() {
     },
   });
 
-  const { register, handleSubmit, reset, watch } = useForm();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    formState: { errors },
+  } = useForm();
+  const name = watch("name") || "";
 
   const departmentsQuery = useQuery({
     queryKey: ["departments"],
@@ -54,7 +61,6 @@ function Modal() {
 
   if (!isModalOpen) return null;
 
-  const name = watch("name");
   const surname = watch("surname");
 
   return createPortal(

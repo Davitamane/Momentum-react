@@ -2,6 +2,7 @@ function DescriptionValidation({ customClassName, text = "" }) {
   const textLength = text.length;
 
   const minWords = text.split(" ").length > 3;
+  // console.log(minWords);
 
   return (
     <div className={`text-xs text-gray-400 ${customClassName}`}>
@@ -9,7 +10,7 @@ function DescriptionValidation({ customClassName, text = "" }) {
         className={
           textLength === 0
             ? "text-gray-400"
-            : minWords >= 2
+            : minWords
             ? "text-green-600"
             : "text-red-600"
         }

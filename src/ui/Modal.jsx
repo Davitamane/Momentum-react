@@ -37,7 +37,6 @@ function Modal() {
     watch,
     formState: { errors },
   } = useForm();
-  const name = watch("name") || "";
 
   const departmentsQuery = useQuery({
     queryKey: ["departments"],
@@ -48,11 +47,12 @@ function Modal() {
     const file = e.target.files[0];
     if (!file) return;
 
-    setImage(file); // store the File, not base64
+    setImage(file);
   }
 
   function onSubmit(data) {
     mutate({ ...data, avatar: image, department_id: departmentId });
+    // console.log(data);
   }
   function handleClose() {
     setIsModalOpen(!isModalOpen);
@@ -61,7 +61,8 @@ function Modal() {
 
   if (!isModalOpen) return null;
 
-  const surname = watch("surname");
+  const name = watch("name") || "";
+  const surname = watch("surname") || "";
 
   return createPortal(
     <div className="fixed top-0 left-0 w-full h-screen bg-black/20 flex items-center justify-center z-50 backdrop-blur-[3px]">
@@ -81,7 +82,8 @@ function Modal() {
           <Input text="სახელი">
             <input
               type="text"
-              className="w-full text-sm focus:border-2 bg-white border border-gray-300 rounded-md resize-none focus:outline-none focus:border-2flex justify-between items-center px-4 py-3"
+              className={`w-full text-sm bg-white border rounded-md border-gray-300 focus:border-gray-400 resize-none focus:outline-none px-4 py-3
+    ${errors.name ? "border-red-500 focus:border-red-500" : ""}`}
               {...register("name", {
                 required: "This field is required",
                 minLength: 2,
@@ -93,7 +95,8 @@ function Modal() {
           <Input text="გვარი">
             <input
               type="text"
-              className="w-full text-sm focus:border-2 bg-white border border-gray-300 rounded-md resize-none focus:outline-none focus:border-2flex justify-between items-center px-4 py-3"
+              className={`w-full text-sm bg-white border focus:border-gray-400 rounded-md resize-none border-gray-300 focus:outline-none px-4 py-3
+    ${errors.surname ? "border-red-500 focus:border-red-500" : ""}`}
               {...register("surname", {
                 required: "This field is required",
                 minLength: 2,

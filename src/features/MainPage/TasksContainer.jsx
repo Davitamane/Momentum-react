@@ -13,23 +13,17 @@ function TasksContainer() {
     queryFn: getTasks,
   });
 
-  if (statusQuery.status === "loading") return null;
-  if (tasksQuery.status === "loading") return null;
-
-  const tasksByStatus = tasksQuery.data?.reduce((acc, task) => {
-    if (!acc[task.status.id]) acc[task.status.id] = [];
-    acc[task.status.id].push(task);
-    return acc;
-  }, {});
-  console.log(tasksByStatus);
+  if (statusQuery.status !== "success") return null;
+  if (tasksQuery.status !== "success") return null;
 
   return (
     <div className="grid grid-cols-4 gap-6 mt-8 max-w-screen">
-      {statusQuery.data?.map((status) => (
+      {statusQuery.data.map((status) => (
         <TasksInnerContainer
           key={status.id}
           id={status.id}
           name={status.name}
+          tasks={tasksQuery.data} 
         />
       ))}
     </div>

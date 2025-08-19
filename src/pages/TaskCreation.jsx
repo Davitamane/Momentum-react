@@ -54,7 +54,7 @@ function TaskCreation() {
   }
   function onSubmit(data) {
     console.log(data);
-    console.log("HALO");
+    // console.log("HALO");
   }
 
   const title = watch("title") || "";

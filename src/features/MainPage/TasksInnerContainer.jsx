@@ -1,22 +1,18 @@
-import { useQuery } from "@tanstack/react-query";
 import Task from "./Task";
 import TaskStage from "./TaskStage";
-import { getTasks } from "../../services/apiQuery";
 
-function TasksInnerContainer({ id, name }) {
-  const tasksQuery = useQuery({
-    queryKey: ["tasks"],
-    queryFn: getTasks,
-  });
-  if (tasksQuery.status === "loading") return null;
+function TasksInnerContainer({ id, name, tasks }) {
+  const filteredTasks = tasks.filter((task) => task.status.id === id); // for putting them in correct container
+
+  // console.log(filteredTasks);
 
   return (
-    <div className="flex flex-col gap-">
+    <div className="flex flex-col gap-4">
       <TaskStage children={name} id={id} />
       <div className="flex flex-col gap-4">
-        {tasksQuery.data?.map(
-          (task) => task.status.id === id && <Task key={task.id} data={task} />
-        )}
+        {filteredTasks.map((task) => (
+          <Task key={task.id} data={task} />
+        ))}
       </div>
     </div>
   );

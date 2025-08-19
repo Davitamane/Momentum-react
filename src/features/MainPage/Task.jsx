@@ -21,7 +21,7 @@ function Task({ data }) {
     locale: ka,
   });
 
-  console.log(description.length);
+  // console.log(description.length);
 
   return (
     <Link to={`/details/${data.id}`}>

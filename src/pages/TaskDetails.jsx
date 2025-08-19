@@ -7,13 +7,30 @@ import { IoCalendarClearOutline } from "react-icons/io5";
 import Dropdown from "../ui/Dropdown";
 import CommentContainer from "../features/TaskDetails/CommentContainer";
 import { useParams } from "react-router-dom";
-import { getSingleTask, getStatuses } from "../services/apiQuery";
-import { useQuery } from "@tanstack/react-query";
+import { getSingleTask, getStatuses, putStatus } from "../services/apiQuery";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { ka } from "date-fns/locale";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
 function TaskDetails() {
+  const [statusId, setStatusId] = useState(null);
+
   const { id } = useParams();
+
+  const queryClient = useQueryClient();
+  const { mutate } = useMutation({
+    mutationFn: (data) => putStatus(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["tasks"]);
+      toast.success("Successfully uploaded!");
+    },
+    onError: (error) => {
+      console.error("failed to send", error);
+      toast.error(error);
+    },
+  });
 
   const taskQuery = useQuery({
     queryKey: ["task", id],
@@ -24,9 +41,6 @@ function TaskDetails() {
     queryKey: ["statuses"],
     queryFn: () => getStatuses(),
   });
-  // if (taskQuery.status === "loading") return null;
-
-  // console.log(taskQuery.data);
 
   if (taskQuery.status !== "success") return null;
 
@@ -44,7 +58,6 @@ function TaskDetails() {
     due_date,
     status,
   } = taskQuery.data;
-  console.log(status.id);
 
   const weekday = format(new Date(due_date), "EEE", { locale: ka });
   const formattedDate = format(new Date(due_date), "dd/MM/yyyy");
@@ -73,13 +86,29 @@ function TaskDetails() {
               <PiClock className="w-7 h-7" />
               <p>სტატუსი</p>
             </TaskDetailsStatuses>
-            <Dropdown data={statusesQuery.data} def={status.id - 1} />
+            {statusesQuery.data && (
+              <Dropdown
+                data={statusesQuery.data}
+                def={status.id - 1}
+                setState={(newStatusId) => {
+                  setStatusId(newStatusId);
+                  mutate({
+                    status_id: newStatusId,
+                  });
+                }}
+              />
+            )}
+
             <TaskDetailsStatuses>
               <GoPerson className="w-7 h-7" />
               <p>თანამშრომელი</p>
             </TaskDetailsStatuses>
             <div className="inline-flex gap-2 items-center">
-              <img src={avatar} alt="test" className="w-8 h-8 rounded-full" />
+              <img
+                src={avatar}
+                alt="test"
+                className="w-8 h-8 rounded-full object-cover object-center"
+              />
               <div className="flex flex-col">
                 <p className="text-xs text-gray-500">{depName}</p>
                 <h3>

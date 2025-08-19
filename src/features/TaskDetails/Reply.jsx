@@ -1,6 +1,5 @@
 function Reply({ reply }) {
   if (!reply) return;
-  console.log(reply);
   const { author_avatar, author_nickname, text } = reply;
 
   return (

@@ -46,6 +46,22 @@ export const postToAPIForm = async (link, modalData) => {
 
   return res.json();
 };
+
+export const putToAPI = async (link, data) => {
+  const res = await fetch(link, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${API_KEY}`,
+    },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to post employee`);
+  }
+};
+
 // export function postToAPITask = async (link, taskData) => {
 
 // }
@@ -63,3 +79,5 @@ export const postComment = (id, commentData) =>
 
 export const postEmployee = (modalData) =>
   postToAPIForm("/api/employees", modalData);
+
+export const putStatus = (id, data) => putToAPI(`/api/tasks/${id}`, data);

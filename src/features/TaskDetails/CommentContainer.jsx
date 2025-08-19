@@ -4,7 +4,6 @@ import Commenting from "./Commenting";
 import { getComments } from "../../services/apiQuery";
 
 function CommentContainer({ taskId }) {
-
   const commentsQuery = useQuery({
     queryKey: ["comments", taskId],
     queryFn: () => getComments(taskId),
@@ -17,6 +16,7 @@ function CommentContainer({ taskId }) {
 
     count++;
   });
+  console.log(commentsQuery.data);
 
   return (
     <div className="w-dvh h-fit bg-background rounded-md border border-outline p-8 flex flex-col gap-8">
@@ -30,7 +30,7 @@ function CommentContainer({ taskId }) {
         </div>
         <div className="flex flex-col gap-10">
           {commentsQuery.data?.map((comment) => (
-            <Comment comment={comment} key={comment.id} />
+            <Comment comment={comment} key={comment.id} taskId={taskId} />
           ))}
         </div>
       </div>

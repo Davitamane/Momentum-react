@@ -10,7 +10,6 @@ function TasksInnerContainer({ id, name }) {
   });
   if (tasksQuery.status === "loading") return null;
 
-
   return (
     <div className="flex flex-col gap-">
       <TaskStage children={name} id={id} />

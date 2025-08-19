@@ -10,6 +10,8 @@ function TasksContainer() {
 
   if (statusQuery.status === "loading") return null;
 
+  // const tasksByStatus = sta
+
   // statusQuery.data?.forEach((status) => console.log(status));
 
   return (

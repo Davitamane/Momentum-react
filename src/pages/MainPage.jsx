@@ -11,9 +11,9 @@ function MainPage() {
     <div className="pt-10">
       <h1 className="text-2xl font-extrabold pb-10">დავალებების გვერდი</h1>
       <Settings open={open} setOpen={setOpen} />
-      {open === "department" && <FilterContainer test={"department"} />}
-      {open === "priority" && <FilterContainer test={"priority"} />}
-      {open === "employee" && <FilterContainer test={"employee"} />}
+      {open === "department" && <FilterContainer />}
+      {open === "priority" && <FilterContainer />}
+      {open === "employee" && <FilterContainer />}
       <SettingsFiltering />
       <TasksContainer />
     </div>

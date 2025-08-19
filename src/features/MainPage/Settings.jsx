@@ -3,6 +3,7 @@ import SettingsButton from "./SettingsButton";
 
 function Settings({open, setOpen}) {
 
+  
   function handleOpen(name) {
     name === open ? setOpen("") : setOpen(name);
   }

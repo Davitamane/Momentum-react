@@ -21,6 +21,8 @@ function Task({ data }) {
     locale: ka,
   });
 
+  console.log(description.length);
+
   return (
     <Link to={`/details/${data.id}`}>
       <div className="border border-yellow p-4 rounded-2xl flex flex-col gap-4">
@@ -35,7 +37,11 @@ function Task({ data }) {
         </div>
         <div className="flex flex-col gap-2">
           <h2 className="font-bold text-base">{title}</h2>
-          <p className="text-sm text-gray-800">{description}</p>
+          <p className="text-sm text-gray-800">
+            {description.length > 100
+              ? description.slice(0, 100) + "..."
+              : description}
+          </p>
         </div>
         <div className="flex w-full justify-between">
           <img

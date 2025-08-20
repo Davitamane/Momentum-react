@@ -1,17 +1,15 @@
-import { useContext } from "react";
 import checkEmpty from "../../assets/checkEmpty.svg";
 import checkFull from "../../assets/check.svg";
+import { useContext } from "react";
 import { MainPageContext } from "../../context/MainPageContext";
 
 function FilterCard({ data, type }) {
   const { dispatch, filters } = useContext(MainPageContext);
 
-  // derive checked state from temp
   const isChecked =
     type === "employee"
       ? filters.temp.employee === data.id
       : filters.temp[type].includes(data.id);
-
   return (
     <button
       className="flex gap-3"

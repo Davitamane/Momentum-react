@@ -33,7 +33,7 @@ function MainPage() {
   // console.log(employeesQuery.data);
 
   useEffect(() => {
-    if (open) dispatch({ type: "RESET_TEMP" });
+    dispatch({ type: "reset" });
   }, [open]);
 
   if (prioritiesQuery.status !== "success") return null;

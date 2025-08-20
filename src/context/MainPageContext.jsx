@@ -1,14 +1,12 @@
 import { createContext, useReducer, useState } from "react";
 
-export const MainPageContext = createContext();
-
 const initialState = {
   temp: {
     department: [],
     priority: [],
     employee: "",
   },
-  applied: {
+  final: {
     department: [],
     priority: [],
     employee: "",
@@ -17,25 +15,24 @@ const initialState = {
 function filterReducer(state, action) {
   switch (action.type) {
     case "toggle_department": {
-      const exists = state.temp.department.includes(action.payload);
+      const includes = state.temp.department.includes(action.payload);
       return {
         ...state,
         temp: {
           ...state.temp,
-          department: exists
+          department: includes
             ? state.temp.department.filter((d) => d !== action.payload)
             : [...state.temp.department, action.payload],
         },
       };
     }
-
     case "toggle_priority": {
-      const exists = state.temp.priority.includes(action.payload);
+      const includes = state.temp.priority.includes(action.payload);
       return {
         ...state,
         temp: {
           ...state.temp,
-          priority: exists
+          priority: includes
             ? state.temp.priority.filter((p) => p !== action.payload)
             : [...state.temp.priority, action.payload],
         },
@@ -53,29 +50,32 @@ function filterReducer(state, action) {
       };
     }
 
-    case "APPLY_FILTERS":
+    case "select": {
       return {
         ...state,
-        applied: { ...state.temp },
+        final: { ...state.temp },
       };
-
-    case "RESET_TEMP":
+    }
+    case "reset": {
       return {
         ...state,
-        temp: { ...state.applied }, // restore checkboxes to last applied
+        temp: { ...state.final },
       };
+    }
 
     default:
-      return state;
+      return { ...state };
   }
 }
 
+export const MainPageContext = createContext();
+
 function MainPageProvider({ children }) {
-  const [filters, dispatch] = useReducer(filterReducer, initialState);
   const [open, setOpen] = useState("");
+  const [filters, dispatch] = useReducer(filterReducer, initialState);
 
   return (
-    <MainPageContext.Provider value={{ filters, dispatch, open, setOpen }}>
+    <MainPageContext.Provider value={{ open, setOpen, dispatch, filters }}>
       {children}
     </MainPageContext.Provider>
   );

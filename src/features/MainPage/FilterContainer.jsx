@@ -4,8 +4,7 @@ import FilterCard from "./FilterCard";
 import { MainPageContext } from "../../context/MainPageContext";
 
 function FilterContainer({ data, type }) {
-  const { dispatch } = useContext(MainPageContext);
-
+  const { dispatch, setOpen } = useContext(MainPageContext);
   return (
     <div className="absolute z-10 bg-white border border-main mt-2 p-5 rounded-xl w-158.5 shadow-md flex flex-col gap-4">
       <div className="flex flex-col gap-6">
@@ -15,7 +14,12 @@ function FilterContainer({ data, type }) {
       </div>
       <div className="flex justify-end">
         <div className="flex justify-end gap-3">
-          <Button onClick={() => dispatch({ type: "APPLY_FILTERS" })}>
+          <Button
+            onClick={() => {
+              dispatch({ type: "select" });
+              setOpen("");
+            }}
+          >
             არჩევა
           </Button>
         </div>

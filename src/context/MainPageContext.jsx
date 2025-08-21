@@ -62,6 +62,42 @@ function filterReducer(state, action) {
         temp: { ...state.final },
       };
     }
+    case "empty": {
+      return {
+        temp: { ...initialState.temp },
+        final: { ...initialState.final },
+      };
+    }
+    case "pop_department": {
+      return {
+        ...state,
+        final: {
+          ...state.final,
+          department: state.final.department.filter(
+            (el) => el !== action.payload
+          ),
+        },
+      };
+    }
+    case "pop_priority": {
+      return {
+        ...state,
+        final: {
+          ...state.final,
+          priority: state.final.priority.filter((el) => el !== action.payload),
+        },
+      };
+    }
+
+    case "pop_employee": {
+      return {
+        ...state,
+        final: {
+          ...state.final,
+          employee: "",
+        },
+      };
+    }
 
     default:
       return { ...state };

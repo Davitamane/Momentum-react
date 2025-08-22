@@ -43,7 +43,6 @@ function TasksContainer() {
           key={status.id}
           id={status.id}
           name={status.name}
-          // only tasks for THIS status, and that match filters
           tasks={filteredTasks.filter((task) => task.status.id === status.id)}
         />
       ))}

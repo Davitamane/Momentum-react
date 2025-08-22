@@ -16,8 +16,29 @@ import { useState } from "react";
 import DescriptionValidation from "../features/TaskCreation/DescriptionValidation";
 import { useForm } from "react-hook-form";
 
+// {
+//   "name": "შექმენით test ფაილი",
+//   "description": "აღწერეთ შესრულებული დავალება რიდმი ფაილით",
+//   "due_date": "2026-01-21",
+//   "status_id": 3,
+//   "employee_id": 3427,
+//   "priority_id": 2
+// }
+
 function TaskCreation() {
-  const [departmentId, setDepartmentId] = useState(null);
+  const [departmentId, setDepartmentId] = useState("");
+
+  const [statusId, setStatusId] = useState(1);
+  const [priorityId, setPriorityId] = useState(2);
+  const [employeeId, setEmployeeId] = useState("");
+
+  // date
+  const tomorrow = new Date();
+
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  const [selectedDate, setSelectedDate] = useState(tomorrow);
+  // ========== //
 
   const statusesQuery = useQuery({
     queryKey: ["statuses"],
@@ -74,7 +95,7 @@ function TaskCreation() {
           <Input text="სათაური">
             <input
               type="text"
-              className="w-full text-sm focus:border-2 bg-white border border-gray-300 rounded-md resize-none focus:outline-none focus:border-2flex justify-between items-center px-4 py-3"
+              className="w-full text-sm focus:border-2 bg-white border border-gray-300 rounded-md resize-none :outline-none focus:border-2flex justify-between items-center px-4 py-3"
               {...register("title", {
                 required: "This field is required",
                 minLength: 2,
@@ -109,22 +130,37 @@ function TaskCreation() {
             customClassName={departmentId ? "" : "text-gray-400"}
           >
             {departmentId ? (
-              <EmployeeDropdown data={sortedEmployees} />
+              <EmployeeDropdown
+                data={sortedEmployees}
+                departmentId={departmentId}
+                setState={setEmployeeId}
+              />
             ) : (
               <div className="flex justify-between items-center border border-gray-300 rounded-md px-4 py-3 cursor-not-allowed min-h-[48px]"></div>
             )}
           </Input>
           <div className="flex justify-between gap-8">
             <Input text="პრიორიტეტი">
-              <PriorityDropdown data={prioritiesQuery.data} />
+              <PriorityDropdown
+                data={prioritiesQuery.data}
+                setState={setPriorityId}
+              />
             </Input>
 
             <Input text="სტატუსი">
-              <Dropdown data={statusesQuery.data} def={0} />
+              <Dropdown
+                data={statusesQuery.data}
+                def={0}
+                setState={setStatusId}
+              />
             </Input>
           </div>
           <Input text="დედლაინი">
-            <CalendarInput />
+            <CalendarInput
+              selectedDate={selectedDate}
+              setSelectedDate={setSelectedDate}
+              tomorrow={tomorrow}
+            />
           </Input>
         </div>
 

@@ -1,5 +1,5 @@
 import { TbXboxX } from "react-icons/tb";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ModalContext } from "../context/ModalContext";
 import Input from "./Input";
@@ -59,16 +59,34 @@ function Modal() {
     setImage(null);
   }
 
-  if (!isModalOpen) return null;
+  const modalRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        setIsModalOpen(false);
+        setImage(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const name = watch("name") || "";
   const surname = watch("surname") || "";
+  if (!isModalOpen) return null;
 
   return createPortal(
     <div className="fixed top-0 left-0 w-full h-screen bg-black/20 flex items-center justify-center z-50 backdrop-blur-[3px]">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex w-3/5 justify-center flex-col gap-6 bg-white p-8 rounded-lg shadow-lg"
+        ref={modalRef}
       >
         <div className="flex w-full justify-end">
           <button onClick={() => handleClose()}>

@@ -7,7 +7,7 @@ function TasksInnerContainer({ id, name, tasks }) {
   // console.log(filteredTasks);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col">
       <TaskStage children={name} id={id} />
       <div className="flex flex-col gap-4">
         {filteredTasks.map((task) => (

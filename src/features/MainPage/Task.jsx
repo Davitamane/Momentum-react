@@ -22,10 +22,23 @@ function Task({ data }) {
   });
 
   // console.log(description.length);
+  const colorClass =
+    {
+      1: "border-teal-400",
+      2: "border-sky-500",
+      3: "border-yellow-400",
+      4: "border-blue-600",
+      5: "border-pink-400",
+      6: "border-purple-500",
+      7: "border-amber-400",
+      8: "border-orange-400",
+    }[department.id] || "bg-pink-400";
 
   return (
     <Link to={`/details/${data.id}`}>
-      <div className="border border-yellow p-4 rounded-2xl flex flex-col gap-4">
+      <div
+        className={`border-2 ${colorClass} p-4 rounded-2xl flex flex-col gap-4`}
+      >
         <div className="flex justify-between w-full">
           <div className="gap-2 flex">
             <TaskImportance priority={priority} />
@@ -37,7 +50,7 @@ function Task({ data }) {
         </div>
         <div className="flex flex-col gap-2">
           <h2 className="font-bold text-base">{title}</h2>
-          <p className="text-sm text-gray-800">
+          <p className="text-sm text-gray-800 h-18  ">
             {description.length > 100
               ? description.slice(0, 100) + "..."
               : description}

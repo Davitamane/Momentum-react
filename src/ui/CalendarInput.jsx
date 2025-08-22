@@ -3,13 +3,11 @@ import DatePicker from "react-datepicker";
 import { FiCalendar } from "react-icons/fi";
 import "react-datepicker/dist/react-datepicker.css";
 
-export default function CalendarInput() {
-  // Default to tomorrow
-  const tomorrow = new Date();
-
-  tomorrow.setDate(tomorrow.getDate() + 1);
-
-  const [selectedDate, setSelectedDate] = useState(tomorrow);
+export default function CalendarInput({
+  selectedDate,
+  setSelectedDate,
+  tomorrow,
+}) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (

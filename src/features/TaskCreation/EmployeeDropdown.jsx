@@ -4,23 +4,25 @@ import { CiCirclePlus } from "react-icons/ci";
 import { useContext } from "react";
 import { ModalContext } from "../../context/ModalContext";
 
-function EmployeeDropdown({ data }) {
+function EmployeeDropdown({ data, departmentId, setState }) {
   console.log(data);
   const { setIsModalOpen } = useContext(ModalContext);
+  const [selected, setSelected] = useState(null);
 
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState();
 
   const dropdownRef = useRef(null);
 
   const handleSelect = (option) => {
     setSelected(option);
     setIsOpen(false);
+    setState(option.id)
+
   };
 
   useEffect(() => {
     setSelected(null);
-  }, [data]);
+  }, [departmentId]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {

@@ -46,6 +46,32 @@ export const postToAPIForm = async (link, modalData) => {
 
   return res.json();
 };
+export const postToAPITask = async (link, taskData) => {
+  const formData = new FormData();
+  formData.append("name", taskData.title);
+  formData.append("description", taskData.description);
+  formData.append("due_date", taskData.dueDate);
+  formData.append("status_id", taskData.statusId);
+  formData.append("employee_id", taskData.employeeId);
+  formData.append("priority_id", taskData.priorityId);
+
+  const res = await fetch(link, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${API_KEY}`,
+    },
+    body: formData,
+  });
+  console.log(formData);
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Failed to post employee: ${text}`);
+  }
+
+  return res.json();
+};
 
 export const putToAPI = async (link, data) => {
   const res = await fetch(link, {
@@ -81,3 +107,4 @@ export const postEmployee = (modalData) =>
   postToAPIForm("/api/employees", modalData);
 
 export const putStatus = (id, data) => putToAPI(`/api/tasks/${id}`, data);
+export const postTask = (data) => postToAPITask(`/api/tasks`, data);

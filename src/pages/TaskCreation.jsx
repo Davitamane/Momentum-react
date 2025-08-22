@@ -1,101 +1,114 @@
+import { useForm, Controller } from "react-hook-form";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import PriorityDropdown from "../features/TaskCreation/PriorityDropdown";
+import EmployeeDropdown from "../features/TaskCreation/EmployeeDropdown";
 import Button from "../ui/Button";
 import CalendarInput from "../ui/CalendarInput";
 import Dropdown from "../ui/Dropdown";
-import Validation from "../ui/Validation";
 import Input from "../ui/Input";
-import { useQuery } from "@tanstack/react-query";
+import Validation from "../ui/Validation";
+import DescriptionValidation from "../features/TaskCreation/DescriptionValidation";
 import {
   getDepartments,
   getEmployees,
   getPriorities,
   getStatuses,
+  postTask,
 } from "../services/apiQuery";
-import EmployeeDropdown from "../features/TaskCreation/EmployeeDropdown";
-import { useState } from "react";
-import DescriptionValidation from "../features/TaskCreation/DescriptionValidation";
-import { useForm } from "react-hook-form";
-
-// {
-//   "name": "შექმენით test ფაილი",
-//   "description": "აღწერეთ შესრულებული დავალება რიდმი ფაილით",
-//   "due_date": "2026-01-21",
-//   "status_id": 3,
-//   "employee_id": 3427,
-//   "priority_id": 2
-// }
+import { toast } from "react-toastify";
 
 function TaskCreation() {
-  const [departmentId, setDepartmentId] = useState("");
+  const { register, handleSubmit, watch, control } = useForm({
+    defaultValues: {
+      title: "",
+      description: "",
+      departmentId: "",
+      employeeId: "",
+      priorityId: 2,
+      statusId: 1,
+      dueDate: new Date(new Date().setDate(new Date().getDate() + 1)),
+    },
+  });
 
-  const [statusId, setStatusId] = useState(1);
-  const [priorityId, setPriorityId] = useState(2);
-  const [employeeId, setEmployeeId] = useState("");
+  const queryClient = useQueryClient();
+  const { mutate } = useMutation({
+    mutationFn: postTask,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["employees"]);
+      toast.success("Successfully uploaded!");
+    },
+    onError: (error) => {
+      console.error("failed to send", error);
+    },
+  });
 
-  // date
-  const tomorrow = new Date();
+  const onSubmit = (data) => {
+    const formattedData = {
+      ...data,
+      dueDate: new Date(data.dueDate).toISOString().split("T")[0], // "2025-12-31"
+    };
 
-  tomorrow.setDate(tomorrow.getDate() + 1);
-
-  const [selectedDate, setSelectedDate] = useState(tomorrow);
-  // ========== //
+    console.log(formattedData);
+    mutate(formattedData);
+  };
 
   const statusesQuery = useQuery({
     queryKey: ["statuses"],
-    queryFn: () => getStatuses(),
+    queryFn: getStatuses,
   });
-
   const prioritiesQuery = useQuery({
     queryKey: ["priorities"],
-    queryFn: () => getPriorities(),
+    queryFn: getPriorities,
   });
-
   const departmentsQuery = useQuery({
     queryKey: ["departments"],
-    queryFn: () => getDepartments(),
+    queryFn: getDepartments,
   });
-
   const employeesQuery = useQuery({
     queryKey: ["employees"],
-    queryFn: () => getEmployees(),
-    enabled: !!departmentId,
+    queryFn: getEmployees,
+    enabled: watch("departmentId") !== "",
   });
 
-  const { register, handleSubmit, watch } = useForm();
-
-  if (statusesQuery.status !== "success") return null;
-  if (prioritiesQuery.status !== "success") return null;
-  if (departmentsQuery.status !== "success") return null;
-
-  let sortedEmployees = [];
-  if (employeesQuery.status === "success") {
-    sortedEmployees = employeesQuery.data.filter(
-      (employee) => employee.department_id === departmentId
-    );
-  }
-  function onSubmit(data) {
-    console.log(data);
-    // console.log("HALO");
-  }
+  if (
+    statusesQuery.isLoading ||
+    prioritiesQuery.isLoading ||
+    departmentsQuery.isLoading
+  )
+    return <div>Loading...</div>;
+  if (
+    statusesQuery.isError ||
+    prioritiesQuery.isError ||
+    departmentsQuery.isError
+  )
+    return <div>Error loading data</div>;
 
   const title = watch("title") || "";
   const description = watch("description") || "";
+  const selectedDepartmentId = watch("departmentId");
+
+  const sortedEmployees =
+    employeesQuery.isSuccess && selectedDepartmentId
+      ? employeesQuery.data.filter(
+          (e) => e.department_id === selectedDepartmentId
+        )
+      : [];
 
   return (
     <>
       <h1 className="text-2xl font-extrabold pt-10 pb-5">
         შექმენით ახალი დავალება
       </h1>
+
       <form
         className="w-full h-fit bg-background p-16"
         onSubmit={handleSubmit(onSubmit)}
-        // onSubmit={() => console.log("halo")}
       >
         <div className="grid grid-cols-2 w-full gap-x-32 gap-y-10">
           <Input text="სათაური">
             <input
               type="text"
-              className="w-full text-sm focus:border-2 bg-white border border-gray-300 rounded-md resize-none :outline-none focus:border-2flex justify-between items-center px-4 py-3"
+              className="w-full text-sm bg-white border border-gray-300 rounded-md resize-none focus:outline-none focus:border-2 px-4 py-3"
               {...register("title", {
                 required: "This field is required",
                 minLength: 2,
@@ -104,13 +117,23 @@ function TaskCreation() {
             />
             <Validation text={title} />
           </Input>
+
           <Input text="დეპარტამენტი">
-            <Dropdown data={departmentsQuery.data} setState={setDepartmentId} />
+            <Controller
+              name="departmentId"
+              control={control}
+              render={({ field }) => (
+                <Dropdown
+                  data={departmentsQuery.data}
+                  def={0}
+                  setState={field.onChange}
+                />
+              )}
+            />
           </Input>
 
           <Input text="აღწერა" required={false}>
             <textarea
-              name="comment"
               className="w-full h-32 text-sm bg-white border border-gray-300 rounded-md resize-none focus:outline-none focus:border-2 p-4"
               {...register("description", {
                 validate: (value) => {
@@ -125,41 +148,68 @@ function TaskCreation() {
             />
             <DescriptionValidation text={description} />
           </Input>
+
           <Input
             text="პასუხისმგებელი თანამშრომელი"
-            customClassName={departmentId ? "" : "text-gray-400"}
+            customClassName={selectedDepartmentId ? "" : "text-gray-400"}
           >
-            {departmentId ? (
-              <EmployeeDropdown
-                data={sortedEmployees}
-                departmentId={departmentId}
-                setState={setEmployeeId}
+            {selectedDepartmentId ? (
+              <Controller
+                name="employeeId"
+                control={control}
+                render={({ field }) => (
+                  <EmployeeDropdown
+                    data={sortedEmployees}
+                    departmentId={selectedDepartmentId}
+                    setState={field.onChange}
+                  />
+                )}
               />
             ) : (
               <div className="flex justify-between items-center border border-gray-300 rounded-md px-4 py-3 cursor-not-allowed min-h-[48px]"></div>
             )}
           </Input>
+
           <div className="flex justify-between gap-8">
             <Input text="პრიორიტეტი">
-              <PriorityDropdown
-                data={prioritiesQuery.data}
-                setState={setPriorityId}
+              <Controller
+                name="priorityId"
+                control={control}
+                render={({ field }) => (
+                  <PriorityDropdown
+                    data={prioritiesQuery.data}
+                    setState={field.onChange}
+                  />
+                )}
               />
             </Input>
 
             <Input text="სტატუსი">
-              <Dropdown
-                data={statusesQuery.data}
-                def={0}
-                setState={setStatusId}
+              <Controller
+                name="statusId"
+                control={control}
+                render={({ field }) => (
+                  <Dropdown
+                    data={statusesQuery.data}
+                    def={0}
+                    setState={field.onChange}
+                  />
+                )}
               />
             </Input>
           </div>
+
           <Input text="დედლაინი">
-            <CalendarInput
-              selectedDate={selectedDate}
-              setSelectedDate={setSelectedDate}
-              tomorrow={tomorrow}
+            <Controller
+              name="dueDate"
+              control={control}
+              render={({ field }) => (
+                <CalendarInput
+                  selectedDate={field.value}
+                  setSelectedDate={field.onChange}
+                  tomorrow={new Date()}
+                />
+              )}
             />
           </Input>
         </div>

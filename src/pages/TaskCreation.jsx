@@ -125,7 +125,6 @@ function TaskCreation() {
               render={({ field }) => (
                 <Dropdown
                   data={departmentsQuery.data}
-                  def={0}
                   setState={field.onChange}
                 />
               )}

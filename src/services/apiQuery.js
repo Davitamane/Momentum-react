@@ -48,7 +48,7 @@ export const postToAPIForm = async (link, modalData) => {
 };
 export const postToAPITask = async (link, taskData) => {
   const formData = new FormData();
-  formData.append("name", taskData.title);
+  formData.append("name", taskData.titleg);
   formData.append("description", taskData.description);
   formData.append("due_date", taskData.dueDate);
   formData.append("status_id", taskData.statusId);

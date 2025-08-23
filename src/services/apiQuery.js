@@ -1,4 +1,4 @@
-import { API_KEY } from "../constants";
+import { API_KEY, API_URL } from "../constants";
 
 async function fetchFromAPI(link) {
   const res = await fetch(link, {
@@ -92,19 +92,21 @@ export const putToAPI = async (link, data) => {
 
 // }
 
-export const getTasks = () => fetchFromAPI("/api/tasks");
-export const getStatuses = () => fetchFromAPI("/api/statuses");
-export const getSingleTask = (id) => fetchFromAPI(`/api/tasks/${id}`);
-export const getComments = (id) => fetchFromAPI(`/api/tasks/${id}/comments`);
-export const getPriorities = () => fetchFromAPI("/api/priorities");
-export const getDepartments = () => fetchFromAPI("/api/departments");
-export const getEmployees = () => fetchFromAPI("/api/employees");
+export const getTasks = () => fetchFromAPI(`${API_URL}/api/tasks`);
+export const getStatuses = () => fetchFromAPI(`${API_URL}/api/statuses`);
+export const getSingleTask = (id) => fetchFromAPI(`${API_URL}/api/tasks/${id}`);
+export const getComments = (id) =>
+  fetchFromAPI(`/${API_URL}api/tasks/${id}/comments`);
+export const getPriorities = () => fetchFromAPI(`${API_URL}/api/priorities`);
+export const getDepartments = () => fetchFromAPI(`${API_URL}/api/departments`);
+export const getEmployees = () => fetchFromAPI(`${API_URL}/api/employees`);
 
 export const postComment = (id, commentData) =>
-  postToAPI(`/api/tasks/${id}/comments`, commentData);
+  postToAPI(`${API_URL}/api/tasks/${id}/comments`, commentData);
 
 export const postEmployee = (modalData) =>
-  postToAPIForm("/api/employees", modalData);
+  postToAPIForm(`/${API_URL}api/employees`, modalData);
 
-export const putStatus = (id, data) => putToAPI(`/api/tasks/${id}`, data);
-export const postTask = (data) => postToAPITask(`/api/tasks`, data);
+export const putStatus = (id, data) =>
+  putToAPI(`/${API_URL}api/tasks/${id}`, data);
+export const postTask = (data) => postToAPITask(`${API_URL}/api/tasks`, data);

@@ -53,6 +53,7 @@ function Modal() {
   function onSubmit(data) {
     mutate({ ...data, avatar: image, department_id: departmentId });
     // console.log(data);
+    handleClose();
   }
   function handleClose() {
     setIsModalOpen(!isModalOpen);
@@ -63,7 +64,6 @@ function Modal() {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-
       if (modalRef.current && !modalRef.current.contains(event.target)) {
         setIsModalOpen(false);
         setImage(null);

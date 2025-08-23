@@ -1,7 +1,7 @@
 {
   "name": "momentum-react",
   "homepage": "https://Davitamane.github.io/Momentum-react",
-  "private": true,
+  "private": false,
   "version": "0.0.0",
   "type": "module",
   "scripts": {

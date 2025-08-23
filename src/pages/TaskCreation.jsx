@@ -16,6 +16,7 @@ import {
   postTask,
 } from "../services/apiQuery";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function TaskCreation() {
   const { register, handleSubmit, watch, control } = useForm({
@@ -29,6 +30,7 @@ function TaskCreation() {
       dueDate: new Date(new Date().setDate(new Date().getDate() + 1)),
     },
   });
+  const navigate = useNavigate();
 
   const queryClient = useQueryClient();
   const { mutate } = useMutation({
@@ -47,7 +49,7 @@ function TaskCreation() {
       ...data,
       dueDate: new Date(data.dueDate).toISOString().split("T")[0], // "2025-12-31"
     };
-
+    navigate("/mainPage");
     console.log(formattedData);
     mutate(formattedData);
   };

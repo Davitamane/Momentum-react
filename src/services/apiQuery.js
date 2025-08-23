@@ -48,7 +48,7 @@ export const postToAPIForm = async (link, modalData) => {
 };
 export const postToAPITask = async (link, taskData) => {
   const formData = new FormData();
-  formData.append("name", taskData.titleg);
+  formData.append("name", taskData.title);
   formData.append("description", taskData.description);
   formData.append("due_date", taskData.dueDate);
   formData.append("status_id", taskData.statusId);
@@ -88,9 +88,7 @@ export const putToAPI = async (link, data) => {
   }
 };
 
-// export function postToAPITask = async (link, taskData) => {
 
-// }
 
 export const getTasks = () => fetchFromAPI(`${API_URL}/api/tasks`);
 export const getStatuses = () => fetchFromAPI(`${API_URL}/api/statuses`);

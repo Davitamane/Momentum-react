@@ -21,7 +21,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools initialIsOpen={false} />
-      <BrowserRouter>
+      <BrowserRouter basename="/Momentum-react">
         <ModalProvider>
           <Routes>
             <Route element={<AppLayout />}>

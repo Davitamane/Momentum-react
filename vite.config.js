@@ -9,7 +9,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "https://momentum.redberryinternship.ge",
+        target: "https://momentum.redberryinternship.ge/api",
         changeOrigin: true,
         secure: false,
       },

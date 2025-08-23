@@ -9,19 +9,23 @@ async function fetchFromAPI(link) {
 }
 
 async function postToAPI(link, body) {
-  const res = await fetch(`${link}`, {
+  const res = await fetch(link, {
     method: "POST",
     headers: {
-      accept: "application/json",
+      Accept: "application/json",
       Authorization: `Bearer ${API_KEY}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify(body),
   });
 
-  if (!res.ok) throw new Error(`Failed to post to ${link}`);
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Failed to post to ${link}: ${text}`);
+  }
   return res.json();
 }
+
 export const postToAPIForm = async (link, modalData) => {
   const formData = new FormData();
   formData.append("name", modalData.name);
@@ -37,7 +41,6 @@ export const postToAPIForm = async (link, modalData) => {
     },
     body: formData,
   });
-  console.log(formData);
 
   if (!res.ok) {
     const text = await res.text();
@@ -46,8 +49,8 @@ export const postToAPIForm = async (link, modalData) => {
 
   return res.json();
 };
-export const postToAPITask = async (link, taskData) => {
 
+export const postToAPITask = async (link, taskData) => {
   const formData = new FormData();
   formData.append("name", taskData.title);
   formData.append("description", taskData.description);
@@ -64,11 +67,10 @@ export const postToAPITask = async (link, taskData) => {
     },
     body: formData,
   });
-  console.log(formData);
 
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`Failed to post employee: ${text}`);
+    throw new Error(`Failed to post task: ${text}`);
   }
 
   return res.json();
@@ -85,15 +87,18 @@ export const putToAPI = async (link, data) => {
     body: JSON.stringify(data),
   });
   if (!res.ok) {
-    throw new Error(`Failed to post employee`);
+    const text = await res.text();
+    throw new Error(`Failed to put data: ${text}`);
   }
+  return res.json();
 };
 
+// ---- ENDPOINTS ----
 export const getTasks = () => fetchFromAPI(`${API_URL}/tasks`);
 export const getStatuses = () => fetchFromAPI(`${API_URL}/statuses`);
 export const getSingleTask = (id) => fetchFromAPI(`${API_URL}/tasks/${id}`);
 export const getComments = (id) =>
-  fetchFromAPI(`/${API_URL}api/tasks/${id}/comments`);
+  fetchFromAPI(`${API_URL}/tasks/${id}/comments`);
 export const getPriorities = () => fetchFromAPI(`${API_URL}/priorities`);
 export const getDepartments = () => fetchFromAPI(`${API_URL}/departments`);
 export const getEmployees = () => fetchFromAPI(`${API_URL}/employees`);
@@ -102,8 +107,8 @@ export const postComment = (id, commentData) =>
   postToAPI(`${API_URL}/tasks/${id}/comments`, commentData);
 
 export const postEmployee = (modalData) =>
-  postToAPIForm(`/${API_URL}api/employees`, modalData);
+  postToAPIForm(`${API_URL}/employees`, modalData);
 
-export const putStatus = (id, data) =>
-  putToAPI(`/${API_URL}api/tasks/${id}`, data);
+export const putStatus = (id, data) => putToAPI(`${API_URL}/tasks/${id}`, data);
+
 export const postTask = (data) => postToAPITask(`${API_URL}/tasks`, data);

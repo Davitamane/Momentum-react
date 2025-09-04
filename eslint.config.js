@@ -33,8 +33,8 @@ export default [
       "react/jsx-uses-react": "error",
       "react/jsx-uses-vars": "error",
       "no-undef": "error",
-      "import/no-unresolved": "error", // 💥 warns for missing imports
-      "import/named": "error", // 💥 warns for incorrect named imports
+      "import/no-unresolved": "error", 
+      "import/named": "error", 
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
       "no-unused-vars": ["error", { varsIgnorePattern: "^[A-Z_]" }],

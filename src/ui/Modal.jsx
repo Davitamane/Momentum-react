@@ -53,7 +53,9 @@ function Modal() {
   function onSubmit(data) {
     mutate({ ...data, avatar: image, department_id: departmentId });
     // console.log(data);
-    handleClose();
+    setIsModalOpen(!isModalOpen);
+    setImage(null);
+    reset();
   }
   function handleClose() {
     setIsModalOpen(!isModalOpen);

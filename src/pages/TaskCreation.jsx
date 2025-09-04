@@ -122,7 +122,7 @@ function TaskCreation() {
 
           <Input text="დეპარტამენტი">
             <Controller
-              name="departmentId"
+              name="departmentId"control
               control={control}
               render={({ field }) => (
                 <Dropdown
@@ -132,7 +132,6 @@ function TaskCreation() {
               )}
             />
           </Input>
-
           <Input text="აღწერა" required={false}>
             <textarea
               className="w-full h-32 text-sm bg-white border border-gray-300 rounded-md resize-none focus:outline-none focus:border-2 p-4"
